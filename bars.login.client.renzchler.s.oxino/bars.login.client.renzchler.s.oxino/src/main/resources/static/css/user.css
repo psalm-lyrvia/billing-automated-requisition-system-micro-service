@@ -1,12 +1,22 @@
-*{
-	margin:0;
-	padding:0;
-	box-sizing:border-box;
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
-#errorPageTitle{
+
+#errorPageTitle {
 	font-family: 'Baloo Chettan', cursive;
-	font-size:8em;
+	font-size: 8em;
 }
-#errorText{
-	font-size:3em;
+
+#errorText {
+	font-size: 3em;
+}
+
+#login {
+	background: #34e89e; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #0f3443, #34e89e);
+	/* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #0f3443, #34e89e);
+	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
