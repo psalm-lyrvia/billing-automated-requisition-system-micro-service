@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="X-UA-compatible" content="IE-edge"/>
+<title>Oppps something went wrong....</title>
+<!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"/>
+  <link href="https://fonts.googleapis.com/css?family=Baloo+Chettan" rel="stylesheet" />
+  <!-- Bootstrap core CSS -->
+  <link th:href="@{css/bootstrap.min.css}" rel="stylesheet"/>
+  <!-- Material Design Bootstrap -->
+  <link th:href="@{css/mdb.min.css}" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" th:href="@{css/user.css}" />
+<script th:src="@{js/jquery.js}"></script>
+</head>
+<body>
+ 	<!-- Start your project here-->
+	<div style="height: 100vh">
+		<div class="flex-center flex-column">
+			<img alt="error" th:src="@{img/logo/error.png}" height="250" class="animated bounce infinite" />
+			<h1 id="errorPageTitle">Oops!</h1>
+			<p class="text-center" id="errorText">Something went wrong...</p>
+			<a href="login" class="btn btn-primary"><span class="fa fa-home mr-1"></span>Back to home</a>
+		</div>
+	</div>
+	<!-- /Start your project here-->
+
+	<!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="js/mdb.js"></script>
+</body>
+</html>

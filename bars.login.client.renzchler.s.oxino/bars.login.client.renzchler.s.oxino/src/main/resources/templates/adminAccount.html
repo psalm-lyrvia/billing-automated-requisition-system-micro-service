@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="X-UA-compatible" content="IE-edge" />
+<title th:text="${response.username}"></title>
+<!-- Font Awesome -->
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
+<!-- Bootstrap core CSS -->
+<link th:href="@{css/bootstrap.min.css}" rel="stylesheet" />
+<!-- Material Design Bootstrap -->
+<link th:href="@{css/mdb.min.css}" rel="stylesheet" />
+
+<link rel="stylesheet" type="text/css"
+	href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" th:href="@{css/user.css}" />
+<script th:src="@{js/jquery.js}"></script>
+</head>
+<body>
+	<!--Navbar -->
+	<nav class="mb-1 navbar navbar-expand-lg navbar-dark  teal mb-5">
+		<a class="navbar-brand" href="#"> <img
+			th:src="@{img/logo/bars_logo.png}" height="30" alt="BARS" />
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent-555"
+			aria-controls="navbarSupportedContent-555" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent-555">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a class="nav-link" href="#">Dashboard
+				</a></li>
+				<li class="nav-item active"><span class="sr-only">(current)</span><a
+					class="nav-link" href="#">Manage Users</a></li>
+				<li class="nav-item"><a class="nav-link" href="#">Archives</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto nav-flex-icons">
+				<li class="nav-item avatar d"><a
+					class="nav-link p-0 dropdown-toggle" data-toggle="dropdown"
+					href="#"> <img
+						src="https://www.gravatar.com/avatar/0000000000?d=mp"
+						class="rounded-circle z-depth-0" alt="avatar image" height="35" />
+				</a>
+					<div class="dropdown-menu dropdown-menu-right dropdown-default"
+						aria-labelledby="navbarDropdownMenuLink-333">
+						<a class="dropdown-item text-center" href="login">Logout</a>
+					</div></li>
+			</ul>
+		</div>
+	</nav>
+	<!--/.Navbar -->
+	<!-- Start your project here-->
+	<div class="container" style="height: 100vh;">
+		<div class="row">
+			<div class="col-md-8 offset-md-2">
+				<p id="message" class="text-center"></p>
+				<h1>Users</h1>
+				<a class="btn btn-sm btn-primary mb-3" data-toggle="modal"
+					data-target="#addUserModal"><span class="fa fa-plus mr-1"></span>Add</a>
+				<table id="userTable" class="table table-striped">
+					<thead>
+						<tr>
+							<th>Username</th>
+							<th>Password</th>
+							<th>Role</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!-- Add User Modal -->
+	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<small class="text-muted">*Please fill all required fields.</small>
+					<form id="addUserForm">
+						<div class="form-group">
+							<label for="username">*Username</label> <input type="text"
+								name="username" class="form-control" id="username" onkeyup="validateUsername('add')" />
+								<small class="text-muted username-msg"></small>
+						</div>
+						<div class="form-group">
+							<label for="password">*Password</label> <input type="password"
+								name="password" class="form-control" id="password" />
+								<small class="text-muted password-msg"></small>
+						</div>
+						<div class="form-group">
+							<label for="passwordConfirm">*Confirm password</label> <input
+								type="password" name="passwordConfirm" class="form-control"
+								id="passwordConfirm" />
+								<small class="text-muted confirm-password-msg"></small>
+						</div>
+						<div class="form-group">
+							<label for="role">*Role</label> <select
+								class="browser-default custom-select" id="role" name="role">
+								<option value="1">Admin</option>
+								<option value="2">User</option>
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary submit" onclick="addUser()">Save
+						changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Edit User Modal -->
+	<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="editModalLabel">Edit User</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<small class="text-muted">*Please fill all required fields.</small>
+					<form id="editUserForm">
+						<input type="hidden" name="editUserIdInput" id="editUserIdInput" />
+						<div class="form-group">
+							<label for="username">*Username</label> <input type="text"
+								name="username" class="form-control" id="editUsername" onkeyup="validateUsername('edit')" />
+								<small class="text-muted username-msg"></small>
+						</div>
+						<div class="form-group">
+							<!-- Default switch -->
+							<div class="custom-control custom-switch">
+								<input type="checkbox" class="custom-control-input"
+									id="passwordOnlySwitch" /> <label
+									class="custom-control-label" for="passwordOnlySwitch"><small class="text-muted d-block">Enable password change
+								only.</small> </label>
+							</div>
+							<label for="password">*Password</label>
+							 <input
+								type="password" name="password" class="form-control"
+								id="editPassword" />
+								<small class="text-muted password-msg"></small>
+						</div>
+						<div class="form-group">
+							<label for="passwordConfirm">*Confirm password</label> <input
+								type="password" name="passwordConfirm" class="form-control"
+								id="editPasswordConfirm" />
+								<small class="text-muted confirm-password-msg"></small>
+						</div>
+						<div class="form-group">
+							<label for="role">*Role</label> <select
+								class="browser-default custom-select" id="editRole" name="role">
+								<option value="1">Admin</option>
+								<option value="2">User</option>
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary submit" onclick="editUser()">Save
+						changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Delete User -->
+	<div class="modal fade" id="deleteUserModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">Delete User</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" id="deleteUserIdInput"
+						name="deleteUserIdInput" />
+					<p class="text-center">Are you sure you want to delete this
+						user?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary"
+						onclick="deleteUser()">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer class="page-footer font-small blue">
+
+		<!-- Copyright -->
+		<div class="footer-copyright text-center py-3">
+			&copy; 2018 Copyright: <a href=""> BARS</a>
+		</div>
+		<!-- Copyright -->
+
+	</footer>
+	<!-- /Start your project here-->
+
+	<!-- SCRIPTS -->
+	<!-- JQuery -->
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+	<!-- Bootstrap tooltips -->
+	<script type="text/javascript" src="js/popper.min.js"></script>
+	<!-- Bootstrap core JavaScript -->
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<!-- MDB core JavaScript -->
+	<script type="text/javascript" src="js/mdb.js"></script>
+	<script type="text/javascript"
+		src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="js/admin.js"></script>
+</body>
+</html>

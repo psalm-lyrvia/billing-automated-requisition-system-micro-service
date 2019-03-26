@@ -1,0 +1,12 @@
+*{
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+}
+#errorPageTitle{
+	font-family: 'Baloo Chettan', cursive;
+	font-size:8em;
+}
+#errorText{
+	font-size:3em;
+}
