@@ -1,0 +1,10 @@
+xhr = new XMLHttpRequest
+
+xhr.open(method, url, true)
+
+//GET
+xhr.send()
+
+//POST
+xhr.sentRequestHeader("Content-type","application/x-www-form-urlencoded")
+xhr.send(request);

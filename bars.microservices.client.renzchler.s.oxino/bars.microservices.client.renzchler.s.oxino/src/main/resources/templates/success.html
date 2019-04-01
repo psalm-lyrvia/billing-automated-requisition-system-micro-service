@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html ng-app="recordApp">
+<head>
+<title>Success</title>
+<style>
+#footer {
+	background-color: white;
+	color: black;
+	clear: both;
+	text-align: center;
+	padding: 5px;
+	border: 1px solid #999999
+}
+
+#content {
+	min-height: 80px;
+	height: 80px;
+	width: 100%;
+	border: 0px;
+	margin: 0;
+	padding: 0;
+	bordercollapse: collapse;
+	background-color: #800000;
+}
+
+#content>tr {
+	height: 60px;
+}
+
+.defaultFont {
+	font-family: Calibri, Garamond, Serif;
+}
+
+#recordTable{
+  table-layout: fixed ;
+  width: 100% ;
+  border-collapse: collapse ;
+}
+#recordTable td {
+  width: 16.7% ;
+  text-align:center;
+}
+#response{
+display:hidden !important;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/lib/angular.min.js"></script>
+<script type="text/javascript" src="/js/app.js"></script>
+</head>
+<body>
+	<table id="content">
+		<tr>
+			<td><img src="./images/acn_logo.PNG" alt="Banner Image" /></td>
+			<td align="right">
+				<p class="defaultFont">
+					<font color="white"><B> Accenture Philippines Delivery
+							Center </B></font>
+				</p>
+				<p class="defaultFont">
+					<font color="white">Technology Capability Fundamentals for
+						Java</font>
+				</p>
+			</td>
+		</tr>
+	</table>
+	<br />
+	<br />
+	<center>
+		<font size="3.5" class="defaultFont" style="color: #D2691E;">Billing
+			Automated Request System</font>
+	</center>
+	<br /> <br /> <br />
+		<!-- RECORD -->
+	<div style="padding:0 20% 0 20%;" ng-controller="RecordController">
+	<input ng-show="false" id="response" th:value="${message}" />
+		<table id="recordTable" align="center">
+			<thead>
+				<tr>
+					<td>billing cycle</td>
+					<td>start date</td>
+					<td>end date</td>
+					<td>firstname</td>
+					<td>lastname</td>
+					<td>amount</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="record in records">
+					<td>{{record.billingCycle}}</td>
+					<td>{{record.startDate}}</td>
+					<td>{{record.endDate}}</td>
+					<td>{{record.customerFirstName}}</td>
+					<td>{{record.customerLastName}}</td>
+					<td>{{record.amount | currency}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+	<!-- ./RECORD -->
+	<br /> <br /> <br />
+	<center>
+	<font size="5"
+			style="color: green;" class="defaultFont" >{{msg}}</font>
+	</center>
+	</div>
+
+	<br />
+	<br />
+	<hr />
+	<hr />
+	<table align="Center" class="defaultFont">
+		<tr>
+			<td colspan="125"><img src="./images/Mentoring_Male_Female4.jpg"
+				height="200" width="200" /></td>
+			<td align="center">
+				<table align="center">
+					<tr>
+						<td><a style="margin-left: 50px;" href="/">Process
+								another Request</a></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+
+
+	<br />
+	<br />
+	<br />
+	<br />
+
+
+
+	<!-- Footer -->
+
+	<div id="footer">
+		<p align="center" class="defaultFont">
+			<font size="1.5"> TCF Java - Machine Problem </font>
+		</p>
+	</div>
+
+	<!-- Footer END -->
+</body>
+<!--<p>${response}</p>  -->
+</html>
