@@ -17,13 +17,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.accenture.bars.microservices.server.renzchler.s.oxino.request.RequestResource;
 
-@Path("record")
+@Path("/")
 public class RecordResource {
 
 	@Autowired
 	private RecordService service;
 
-	// http://localhost:8090/record/get-records
+	// http://localhost:8090/
+	@GET
+	@Path("/")
+	public Response test() {
+		return Response.status(200).build();
+	}
+
+	// http://localhost:8090/get-records
 	@GET
 	@Path("get-records")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -57,11 +64,10 @@ public class RecordResource {
 			if (records.isEmpty()) {
 				obj.put("msg", "No result found.");
 				return Response.status(200).entity(obj.toString()).build();
-			}else{
+			} else {
 				obj.put("msg", "Successfully processed Request File.");
 				return Response.status(200).entity(obj.toString()).build();
 			}
-
 
 		} catch (Exception e) {
 			Logger.getLogger(RequestResource.class).error(e.getMessage());

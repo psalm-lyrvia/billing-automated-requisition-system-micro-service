@@ -8,23 +8,30 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
-
 import org.json.JSONException;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.netflix.ribbon.RibbonClient;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.accenture.bars.microservices.client.renzchler.s.oxino.BarsRibbonConfiguration;
 import com.accenture.bars.microservices.client.renzchler.s.oxino.domain.Record;
 import com.accenture.bars.microservices.client.renzchler.s.oxino.exception.BarsException;
 import com.accenture.bars.microservices.client.renzchler.s.oxino.file.BarsXMLUtils;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 
-@Component
+@RibbonClient(name = "bars-server", configuration = BarsRibbonConfiguration.class)
+@Service
 public class BarsService {
+
+	@Autowired
+	private RestTemplate restTemplate;
 
 	// Save the uploaded file to this folder
 	private static String DIR_PATH = "C:\\Java_Spring_Boot_Micro_Service_RSO"
@@ -38,18 +45,24 @@ public class BarsService {
 
 	@HystrixCommand(fallbackMethod = "testfb")
 	public String testcb() {
-		// refresh request table
-		String url = "http://localhost:8090/request/delete-request/";
-		Client client = new Client();
-		WebResource wr = client.resource(url);
-		ClientResponse response = wr.type(MediaType.APPLICATION_JSON).delete(
-				ClientResponse.class);
+		// setup header
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		return "success";
+		String test = "{hello:'hello'}";
+
+		HttpEntity<String> request = new HttpEntity<>(test, headers);
+		;
+
+		ResponseEntity<String> response = this.restTemplate.postForEntity(
+				"http://bars-server/test-cb", request, String.class);
+
+		return response.getBody();
 	}
 
-	@HystrixCommand(fallbackMethod = "barsUploadFallback")
-	public String barsUpload(MultipartFile file, Model model) throws JSONException, ParseException {
+	//@HystrixCommand(fallbackMethod = "barsUploadFallback")
+	public String barsUpload(MultipartFile file, Model model)
+			throws JSONException, ParseException {
 
 		if (file.isEmpty()) {
 			model.addAttribute("msg", BarsException.NO_RECORDS_TO_READ);
@@ -59,14 +72,6 @@ public class BarsService {
 		try {
 			FileProcessor fileProcessor = new FileProcessor();
 
-			String url;
-
-			Client client;
-
-			WebResource wr;
-
-			ClientResponse response;
-			//
 			// Get the file and save it somewhere
 			byte[] bytes = file.getBytes();
 			String tempFile = DIR_PATH + file.getOriginalFilename();
@@ -80,28 +85,36 @@ public class BarsService {
 
 			String request = fileProcessor.execute(requestFile);
 
-			url = "http://localhost:8090/request/add-request";
+			// setup header
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
 
-			client = new Client();
+			HttpEntity<String> requestEntity;
 
-			wr = client.resource(url);
+			ResponseEntity<String> response;
 
-			response = wr.type(MediaType.APPLICATION_JSON).post(
-					ClientResponse.class, request);
+			String url;
+
+			// String test = "{hello:'hello'}";
+			url = "http://bars-server/add-request";
+			requestEntity = new HttpEntity<>(request, headers);
+
+			response = this.restTemplate.postForEntity(url, requestEntity,
+					String.class);
 
 			// check if request is save
-			if (response.getStatus() == 200) {
+			if (response.getStatusCodeValue() == 200) {
 
-				url = "http://localhost:8090/record/get-records";
-				client = new Client();
-				wr = client.resource(url);
-				response = wr.type(MediaType.APPLICATION_JSON).get(
-						ClientResponse.class);
+				url = "http://bars-server/get-records";
+
+				requestEntity = new HttpEntity<>(request, headers);
+
+				response = this.restTemplate.getForEntity(url, String.class);
 
 				// retrieve records
-				if (response.getStatus() == 200) {
+				if (response.getStatusCodeValue() == 200) {
 
-					String recordsResponse = response.getEntity(String.class);
+					String recordsResponse = response.getBody();
 
 					// Convert string json array to list object
 					List<Record> records = fileProcessor
@@ -113,11 +126,11 @@ public class BarsService {
 					if (isGenerated) {
 
 						// refresh request table
-						url = "http://localhost:8090/request/delete-request/";
-						client = new Client();
-						wr = client.resource(url);
-						response = wr.type(MediaType.APPLICATION_JSON).delete(
-								ClientResponse.class);
+						url = "http://bars-server/delete-request";
+
+						requestEntity = new HttpEntity<>(request, headers);
+
+						this.restTemplate.delete(url);
 
 						// delete temporary files
 						fileProcessor.clearDir(DIR_PATH);
@@ -137,7 +150,7 @@ public class BarsService {
 				} else {
 					model.addAttribute("message", "You successfully uploaded '"
 							+ file.getOriginalFilename() + "' " + mimeType
-							+ "\n" + response.getEntity(String.class));
+							+ "\n" + response.getBody());
 				}
 
 			} else {
@@ -145,7 +158,7 @@ public class BarsService {
 						"message",
 						"Request not saved. '" + file.getOriginalFilename()
 								+ "' " + mimeType + "\n"
-								+ response.getEntity(String.class));
+								+ response.getBody());
 			}
 
 		} catch (IOException e) {
@@ -160,8 +173,7 @@ public class BarsService {
 		return "index";
 	}
 
-
-	public String barsUploadFallback(MultipartFile file, Model model){
+	public String barsUploadFallback(MultipartFile file, Model model) {
 		return "barsFallback";
 	}
 

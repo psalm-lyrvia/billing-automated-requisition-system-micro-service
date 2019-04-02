@@ -21,17 +21,17 @@ import com.sun.jersey.api.client.WebResource;
 @Controller
 public class LoginController {
 
-	// http://localhost:3000/login
+	// http://localhost:3070/login
 	@RequestMapping("/login")
 	public String getLoginPage() {
 		return "login";
 	}
 
-	//http://localhost:3000/register
+	//http://localhost:3070/register
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ModelAndView authenticate(@QueryParam("username") String username,
 			@QueryParam("password") String password, Model model) throws JsonParseException, JsonMappingException, IOException{
-		String url = "http://localhost:8080/auth/verify";
+		String url = "http://localhost:3000/auth/verify";
 
 		String authString = username + ":" + password;
 		// encode

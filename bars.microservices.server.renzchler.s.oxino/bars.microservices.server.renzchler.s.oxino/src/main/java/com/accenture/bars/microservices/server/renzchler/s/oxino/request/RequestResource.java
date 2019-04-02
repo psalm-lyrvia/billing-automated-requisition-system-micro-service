@@ -16,24 +16,33 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Path("request")
+@Path("/")
 public class RequestResource {
 
 	@Autowired
 	private RequestService service;
 
-	//http://localhost:8090/request/test-cb
+	// http://localhost:8090/
 	@GET
-	@Path("test-cb")
-	public String testcb(){
+	@Path("/")
+	public String testcb() {
 		return "uploadForm";
 	}
 
-	// http://localhost:8090/request/add-request
+	// http://localhost:8090/request/test-cb
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("test-cb")
+	public String testcsb(String request) {
+		return request + " from server";
+	}
+
+	// http://localhost:8090/add-request
 	@POST
 	@Path("add-request")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addRequest(String request) throws JSONException, ParseException {
+	public Response addRequest(String request) throws JSONException,
+			ParseException {
 		try {
 			service.addRequest(request);
 			return Response.status(200).entity("Request saved.").build();
@@ -48,7 +57,7 @@ public class RequestResource {
 	@GET
 	@Path("get-requests")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Request> getAllRequest(){
+	public List<Request> getAllRequest() {
 		return service.getAllRequest();
 	}
 

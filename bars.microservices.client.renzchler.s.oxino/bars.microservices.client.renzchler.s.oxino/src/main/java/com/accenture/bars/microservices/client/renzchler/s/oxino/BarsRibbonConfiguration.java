@@ -2,6 +2,7 @@ package com.accenture.bars.microservices.client.renzchler.s.oxino;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AvailabilityFilteringRule;
@@ -10,6 +11,7 @@ import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.PingUrl;
 
 public class BarsRibbonConfiguration {
+
 	@Autowired
 	IClientConfig ribbonClientConfig;
 

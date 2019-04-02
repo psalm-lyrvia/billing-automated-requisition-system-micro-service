@@ -17,7 +17,7 @@ import com.sun.jersey.api.client.WebResource;
 @RestController
 public class UserController {
 
-	// http://localhost:3000/register
+	// http://localhost:3070/register
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
 	public Response register(@QueryParam("username") String username,
@@ -44,7 +44,7 @@ public class UserController {
 
 		}else{
 
-			url = "http://localhost:8080/server/validate-user";
+			url = "http://localhost:3000/server/validate-user";
 			client = Client.create();
 			wr = client.resource(url);
 			request = new JSONObject();
@@ -55,7 +55,7 @@ public class UserController {
 				return Response.status(409).entity("Username already exists.")
 						.type(MediaType.APPLICATION_JSON).build();
 			}else{
-				url = "http://localhost:8080/server/add-user";
+				url = "http://localhost:3000/server/add-user";
 				client = Client.create();
 				wr = client.resource(url);
 
@@ -79,7 +79,7 @@ public class UserController {
 
 	}
 
-	//http://localhost:3000/update
+	//http://localhost:3070/update
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	@ResponseBody
 	public Response update(@QueryParam("id") Integer id, @QueryParam("username") String username,
@@ -106,7 +106,7 @@ public class UserController {
 
 		}else{
 
-			url = "http://localhost:8080/server/validate-user";
+			url = "http://localhost:3000/server/validate-user";
 			client = Client.create();
 			wr = client.resource(url);
 			request = new JSONObject();
@@ -118,7 +118,7 @@ public class UserController {
 						.type(MediaType.APPLICATION_JSON).build();
 			}else{
 
-				url = "http://localhost:8080/server/edit-user";
+				url = "http://localhost:3000/server/edit-user";
 				client = Client.create();
 				wr = client.resource(url);
 
@@ -170,7 +170,7 @@ public class UserController {
 
 		}else{
 
-			url = "http://localhost:8080/server/edit-user";
+			url = "http://localhost:3000/server/edit-user";
 			client = Client.create();
 			wr = client.resource(url);
 

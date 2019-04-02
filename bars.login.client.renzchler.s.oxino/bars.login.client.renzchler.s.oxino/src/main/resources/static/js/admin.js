@@ -9,7 +9,7 @@ $(document).ready(function() {
 	$.ajax({
 		method : "GET",
 		datatype : "json",
-		url : "http://localhost:8080/server/users",
+		url : "http://localhost:3000/server/users",
 		error:function(){
 			$("#message").text("*" + data.entity).css("color", "red");
 		}
@@ -188,7 +188,7 @@ function validateUsername(type){
 		username = {"username":$("#editUsername").val()};
 	}
 	$.ajax({
-		url:"http://localhost:8080/server/validate-user",
+		url:"http://localhost:3000/server/validate-user",
 		method:"POST",
 		data:JSON.stringify(username),
 		datatype:"json",
@@ -232,7 +232,7 @@ function addUser() {
 	};
 
 	$.ajax({
-		url : "http://localhost:3000/register",
+		url : "http://localhost:3070/register",
 		method : "POST",
 		data : user,
 		error:function(data){
@@ -252,7 +252,7 @@ function addUser() {
 		$.ajax({
 			method : "GET",
 			datatype : "json",
-			url : "http://localhost:8080/server/users"
+			url : "http://localhost:3000/server/users"
 		}).done(function(data) {
 
 			const users = Object.values(data);
@@ -285,7 +285,7 @@ function deleteUser(){
 
 	$("#deleteUserModal").modal("hide");
 	$.ajax({
-		url : "http://localhost:8080/server/delete-user",
+		url : "http://localhost:3000/server/delete-user",
 		datatype : "json",
 		method : "DELETE",
 		data : JSON.stringify(id),
@@ -301,7 +301,7 @@ function deleteUser(){
 		$.ajax({
 			method : "GET",
 			datatype : "json",
-			url : "http://localhost:8080/server/users"
+			url : "http://localhost:3000/server/users"
 		}).done(function(data) {
 
 			const users = Object.values(data);
@@ -328,7 +328,7 @@ function toggleEditUserModal(id){
 	$.ajax({
 		method : "GET",
 		datatype : "json",
-		url : "http://localhost:8080/server/get-user/" + id
+		url : "http://localhost:3000/server/get-user/" + id
 	}).done(function(data) {
 		$("#editUserIdInput").val(data.id);
 		$("#editUsername").val(data.username);
@@ -355,9 +355,9 @@ function editUser(){
 	var url;
 
 	if ($("#editUsername").prop("disabled")) {
-		url = "http://localhost:3000/update-password-only";
+		url = "http://localhost:3070/update-password-only";
 	}else{
-		url = "http://localhost:3000/update";
+		url = "http://localhost:3070/update";
 	}
 
 	var user = {
@@ -389,7 +389,7 @@ function editUser(){
 		$.ajax({
 			method : "GET",
 			datatype : "json",
-			url : "http://localhost:8080/server/users"
+			url : "http://localhost:3000/server/users"
 		}).done(function(data) {
 			$("#editUserForm").trigger("reset");
 			const users = Object.values(data);
