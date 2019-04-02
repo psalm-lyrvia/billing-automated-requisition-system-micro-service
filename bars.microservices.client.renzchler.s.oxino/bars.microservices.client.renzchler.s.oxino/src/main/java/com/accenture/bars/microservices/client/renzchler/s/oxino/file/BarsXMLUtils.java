@@ -52,13 +52,11 @@ public class BarsXMLUtils {
 				request.appendChild(billingCycle);
 
 				Element startDate = doc.createElement("start-date");
-				startDate.appendChild(doc.createTextNode(record.getStartDate()
-						.toString()));
+				startDate.appendChild(doc.createTextNode(record.getsDate()));
 				request.appendChild(startDate);
 
 				Element endDate = doc.createElement("end-date");
-				endDate.appendChild(doc.createTextNode(record.getEndDate()
-						.toString()));
+				endDate.appendChild(doc.createTextNode(record.geteDate()));
 				request.appendChild(endDate);
 
 				Element amount = doc.createElement("amount");

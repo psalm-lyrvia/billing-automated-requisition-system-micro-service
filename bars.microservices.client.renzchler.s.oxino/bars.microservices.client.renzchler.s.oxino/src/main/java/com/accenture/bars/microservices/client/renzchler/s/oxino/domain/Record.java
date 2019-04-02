@@ -8,6 +8,20 @@ public class Record {
 	private int billingCycle;
 	private Date startDate;
 	private Date endDate;
+	private String sDate;
+	private String eDate;
+	public String getsDate() {
+		return sDate;
+	}
+	public void setsDate(String sDate) {
+		this.sDate = sDate;
+	}
+	public String geteDate() {
+		return eDate;
+	}
+	public void seteDate(String eDate) {
+		this.eDate = eDate;
+	}
 	private String accountName;
 	private String customerFirstName;
 	private String customerLastName;

@@ -60,7 +60,7 @@ public class BarsService {
 		return response.getBody();
 	}
 
-	//@HystrixCommand(fallbackMethod = "barsUploadFallback")
+	@HystrixCommand(fallbackMethod = "barsUploadFallback")
 	public String barsUpload(MultipartFile file, Model model)
 			throws JSONException, ParseException {
 
@@ -95,7 +95,6 @@ public class BarsService {
 
 			String url;
 
-			// String test = "{hello:'hello'}";
 			url = "http://bars-server/add-request";
 			requestEntity = new HttpEntity<>(request, headers);
 

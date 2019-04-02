@@ -68,6 +68,8 @@ public class FileProcessor {
 			record.get(i).setAmount(arr.getJSONObject(i).getDouble("amount"));
 			record.get(i).setCustomerFirstName(arr.getJSONObject(i).getString("customerFirstName"));
 			record.get(i).setCustomerLastName(arr.getJSONObject(i).getString("customerLastName"));
+			record.get(i).setsDate(arr.getJSONObject(i).getString("strSDate"));
+			record.get(i).seteDate(arr.getJSONObject(i).getString("strEDate"));
 
 		}
 
