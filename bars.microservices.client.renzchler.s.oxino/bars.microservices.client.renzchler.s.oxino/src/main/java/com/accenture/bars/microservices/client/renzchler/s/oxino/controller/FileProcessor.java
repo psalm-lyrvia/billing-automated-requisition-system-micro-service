@@ -6,8 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jboss.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +29,7 @@ public class FileProcessor {
 
 		List<Request> requests = inputFile.readFile();
 
-		// convert to json array
+		//convert to json array
 		JSONObject obj = new JSONObject();
 		JSONArray arr = new JSONArray();
 

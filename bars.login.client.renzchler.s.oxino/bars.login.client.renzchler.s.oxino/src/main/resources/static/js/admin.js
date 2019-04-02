@@ -50,7 +50,7 @@ $(document).ready(function() {
 				checkUsername(identifier);
 				break;
 			default:
-				console.log("error");
+
 
 		}
 
@@ -68,7 +68,7 @@ $(document).ready(function() {
 				checkPassword(identifier);
 				break;
 			default:
-				console.log("error");
+
 
 		}
 
@@ -78,7 +78,7 @@ $(document).ready(function() {
 	$("input[name='passwordConfirm']").on("blur", function(){
 
 		var identifier = this.id;
-		console.log(identifier)
+
 		switch(identifier){
 			case "passwordConfirm":
 				passwordConfirm(identifier, '');
@@ -88,7 +88,7 @@ $(document).ready(function() {
 
 				break;
 			default:
-				console.log("error");
+
 
 		}
 

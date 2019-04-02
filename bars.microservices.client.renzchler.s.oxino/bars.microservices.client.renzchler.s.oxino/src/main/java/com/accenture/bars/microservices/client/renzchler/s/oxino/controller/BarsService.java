@@ -9,6 +9,8 @@ import java.text.ParseException;
 import java.util.List;
 
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.http.HttpEntity;
@@ -33,6 +35,10 @@ public class BarsService {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	// loggger
+	private static Logger logger = LoggerFactory
+			.getLogger(FileController.class);
+
 	// Save the uploaded file to this folder
 	private static String DIR_PATH = "C:\\Java_Spring_Boot_Micro_Service_RSO"
 			+ "\\bars.microservices.client.renzchler.s.oxino"
@@ -43,30 +49,12 @@ public class BarsService {
 		super();
 	}
 
-	@HystrixCommand(fallbackMethod = "testfb")
-	public String testcb() {
-		// setup header
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		String test = "{hello:'hello'}";
-
-		HttpEntity<String> request = new HttpEntity<>(test, headers);
-		;
-
-		ResponseEntity<String> response = this.restTemplate.postForEntity(
-				"http://bars-server/test-cb", request, String.class);
-
-		return response.getBody();
-	}
-
 	@HystrixCommand(fallbackMethod = "barsUploadFallback")
 	public String barsUpload(MultipartFile file, Model model)
 			throws JSONException, ParseException {
 
 		if (file.isEmpty()) {
 			model.addAttribute("msg", BarsException.NO_RECORDS_TO_READ);
-			return "index";
 		}
 
 		try {
@@ -77,8 +65,6 @@ public class BarsService {
 			String tempFile = DIR_PATH + file.getOriginalFilename();
 			Path path = Paths.get(tempFile);
 			Files.write(path, bytes);
-			int index = file.getOriginalFilename().lastIndexOf('.');
-			String mimeType = file.getOriginalFilename().substring(index + 1);
 
 			// get temp file
 			File requestFile = new File(tempFile);
@@ -140,32 +126,25 @@ public class BarsService {
 
 					} else {
 						model.addAttribute(
-								"message",
-								"File Retrieve '" + file.getOriginalFilename()
-										+ "' " + mimeType + "\n"
-										+ records.toString());
+								"msg", BarsException.NO_RECORDS_TO_WRITE);
 					}
 
 				} else {
-					model.addAttribute("message", "You successfully uploaded '"
-							+ file.getOriginalFilename() + "' " + mimeType
-							+ "\n" + response.getBody());
+					model.addAttribute("msg", BarsException.NO_RECORDS_TO_READ);
 				}
 
 			} else {
-				model.addAttribute(
-						"message",
-						"Request not saved. '" + file.getOriginalFilename()
-								+ "' " + mimeType + "\n"
-								+ response.getBody());
+				model.addAttribute("msg",
+						BarsException.NO_RECORDS_TO_WRITE);
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} catch (NullPointerException e) {
-			// throw new BarsException(BarsException.NO_SUPPORTED_FILE);
+			logger.error(e.getMessage());
 			model.addAttribute("msg", BarsException.NO_SUPPORTED_FILE);
 		} catch (BarsException e) {
+			logger.error(e.getMessage());
 			model.addAttribute("msg", e.getMessage());
 		}
 
@@ -174,10 +153,6 @@ public class BarsService {
 
 	public String barsUploadFallback(MultipartFile file, Model model) {
 		return "barsFallback";
-	}
-
-	public String testfb() {
-		return "index";
 	}
 
 }
